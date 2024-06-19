@@ -17,38 +17,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install jq
-        run: sudo apt-get install jq
-
       - name: Get Package Version
         id: get_version
         run: |
           PACKAGE_VERSION=$(jq -r '.version' package.json)
-          echo "Package version: $PACKAGE_VERSION"  # Debugging: print the package version
           echo "version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
 
       - name: Get Current Date and Time
         id: get_datetime
         run: |
           CURRENT_DATETIME=$(date --utc +%Y-%m-%dT%H:%M:%SZ)
-          echo "Current Date and Time: $CURRENT_DATETIME"  # Debugging: print the current date and time
           echo "datetime=$CURRENT_DATETIME" >> $GITHUB_OUTPUT
-
-
-      # - name: Make Request
-      #   id: myRequest
-      #   uses: fjogeleit/http-request-action@v1
-      #   with:
-      #     url: 'https://driverseat-staging.auth.eu-central-1.amazoncognito.com/oauth2/token'
-      #     method: 'POST'
-      #     customHeaders: '{"Content-Type": "application/json"}'
-      #     data: '{"grant_type": "client_credentials", "client_id": "7om4hqjn2bnbm079r3u64db64v", "client_secret": "1tlsoi2p5kerqsc3jj923asrbbqptpqcoi0r5enldcrkmqtdmha0"}'
-      # - name: Show Response
-      #   run: |
-      #     echo ${{ steps.myRequest.outputs.response }}
-      #     echo ${{ steps.myRequest.outputs.headers }}
-      #     echo ${{ steps.myRequest.outputs.status }}
-      #     echo ${{ fromJson(steps.myRequest.outputs.response).access_token }}
 
       - name: Obtain Access Token
         id: get_token
@@ -66,35 +45,28 @@ jobs:
           echo "token=$(echo $response | jq -r '.access_token')" >> $GITHUB_OUTPUT
 
 
-      # - name: Obtain Access Token
-      #   id: get_token
+      # - name: Submit new app version - Android
       #   run: |
-      #     curl --location 'https://driverseat-staging.auth.eu-central-1.amazoncognito.com/oauth2/token/' \
-      #     --header 'Content-Type: application/x-www-form-urlencoded' \
-      #     --header 'Cookie: XSRF-TOKEN=5d9f6e0a-715c-4142-8731-29a17410fb91' \
-      #     --data-urlencode 'grant_type=client_credentials' \
-      #     --data-urlencode 'client_id=7om4hqjn2bnbm079r3u64db64v' \
-      #     --data-urlencode 'client_secret=1tlsoi2p5kerqsc3jj923asrbbqptpqcoi0r5enldcrkmqtdmha0'
-      # - name: Show Response
+      #     curl -X 'PUT' \
+      #       'https://api-staging.financiallease.nl/versions/FinancialLeaseMobileApp' \
+      #       -H 'accept: */*' \
+      #       -H 'Authorization: Bearer ${{ steps.get_token.outputs.token }}' \
+      #       -H 'Content-Type: application/json' \
+      #       -d '{
+      #       "platform": "Android",
+      #       "version": "${{ steps.get_version.outputs.version }}",
+      #       "releasedAt": "${{ steps.get_datetime.outputs.datetime }}"
+      #     }'
+
+      # - name: Submit new app version - IOS
       #   run: |
-      #     echo ${{ steps.get_token }}
-      #     echo ${{ steps.get_token.response }}
-      #     echo ${{ steps.get_token.outputs.response }}
-      #     echo ${{ fromJson(steps.get_token.outputs.response).access_token }}
-
-      - name: Submit new app version
-        run: |
-          curl -X 'PUT' \
-            'https://api-staging.financiallease.nl/versions/FinancialLeaseMobileApp' \
-            -H 'accept: */*' \
-            -H 'Authorization: Bearer ${{ steps.get_token.outputs.token }}' \
-            -H 'Content-Type: application/json' \
-            -d '{
-            "platform": "Android",
-            "version": "2.0.3",
-            "releasedAt": "${{ steps.get_datetime.outputs.datetime }}"
-          }'
-
-      - name: Print Token (for debugging purposes)
-        run: |
-          echo "Access Token: ${{ steps.get_token.outputs.token }}"
+      #     curl -X 'PUT' \
+      #       'https://api-staging.financiallease.nl/versions/FinancialLeaseMobileApp' \
+      #       -H 'accept: */*' \
+      #       -H 'Authorization: Bearer ${{ steps.get_token.outputs.token }}' \
+      #       -H 'Content-Type: application/json' \
+      #       -d '{
+      #       "platform": "IOS",
+      #       "version": "${{ steps.get_version.outputs.version }}",
+      #       "releasedAt": "${{ steps.get_datetime.outputs.datetime }}"
+      #     }'
