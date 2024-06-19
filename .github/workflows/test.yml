@@ -39,7 +39,7 @@ jobs:
         id: myRequest
         uses: fjogeleit/http-request-action@v1
         with:
-          url: 'https://driverseat-staging.auth.eu-central-1.amazoncognito.com/oauth2/token/'
+          url: 'https://driverseat-staging.auth.eu-central-1.amazoncognito.com/oauth2/tokenlp'
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
           data: '{"grant_type": "client_credentials", "client_id": "7om4hqjn2bnbm079r3u64db64v", "client_secret": "1tlsoi2p5kerqsc3jj923asrbbqptpqcoi0r5enldcrkmqtdmha0"}'
