@@ -91,9 +91,9 @@ jobs:
       #       -H 'Content-Type: application/json' \
       #       -d '{
       #       "platform": "Android",
-      #       "version": "2.23.3",
+      #       "version": "2.0.3",
       #       "releasedAt": "${{ steps.get_datetime.outputs.datetime }}"
       #     }'
 
-      # - name: Print Token (for debugging purposes)
-      #   run: echo "Access Token: ${{ steps.get_token.outputs.token }}"
+      - name: Print Token (for debugging purposes)
+        run: echo "Access Token: ${{ steps.get_token.outputs.token }}"
