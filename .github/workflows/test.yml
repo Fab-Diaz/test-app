@@ -96,4 +96,5 @@ jobs:
       #     }'
 
       - name: Print Token (for debugging purposes)
-        run: echo "Access Token: ${{ steps.get_token.outputs.token }}"
+        run: |
+          echo "Access Token: ${{ steps.get_token.outputs.token }}"
