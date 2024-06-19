@@ -82,18 +82,18 @@ jobs:
       #     echo ${{ steps.get_token.outputs.response }}
       #     echo ${{ fromJson(steps.get_token.outputs.response).access_token }}
 
-      # - name: Submit new app version
-      #   run: |
-      #     curl -X 'PUT' \
-      #       'https://api-staging.financiallease.nl/versions/FinancialLeaseMobileApp' \
-      #       -H 'accept: */*' \
-      #       -H 'Authorization: Bearer ${{ steps.get_token.outputs.token }}' \
-      #       -H 'Content-Type: application/json' \
-      #       -d '{
-      #       "platform": "Android",
-      #       "version": "2.0.3",
-      #       "releasedAt": "${{ steps.get_datetime.outputs.datetime }}"
-      #     }'
+      - name: Submit new app version
+        run: |
+          curl -X 'PUT' \
+            'https://api-staging.financiallease.nl/versions/FinancialLeaseMobileApp' \
+            -H 'accept: */*' \
+            -H 'Authorization: Bearer ${{ steps.get_token.outputs.token }}' \
+            -H 'Content-Type: application/json' \
+            -d '{
+            "platform": "Android",
+            "version": "2.0.3",
+            "releasedAt": "${{ steps.get_datetime.outputs.datetime }}"
+          }'
 
       - name: Print Token (for debugging purposes)
         run: |
